@@ -107,6 +107,10 @@ Install dependencies using:
 
 ```bash
 pip install -r requirements.txt
+```
+
+# Running the System
+The system is designed to run on the IFI cluster environment
 
 ## Start the cluster
 
@@ -114,6 +118,50 @@ Run the deployment script:
 
 ```bash
 ./run.sh
+```
+
+Default configuration:
+
+- Cluster controllers: 3
+- Local controllers: 2
+- Replica controllers: 1
+- Agents per node: 2
+
+Custom configurations can be provided as arguments:
+
+```bash
+./run.sh <cluster_controllers> <local_controllers> <replicas> <agents_per_node>
+```
+
+Example
+```bash
+./run.sh 3 4 1 2
+```
+
+This starts:
+- 3 cluster controllers
+- 4 worker nodes
+- 1 replica node
+- 2 agents per worker node
+
+##  Stop the cluster
+To terminare all running processes and cleaning the environment:
+```bash
+./cleanup.sh
+```
+
+This script will:
+- stop cluster controllers
+- stop local controllers
+- stop worker agents
+- remove log files
+- remove temporary Raft state files
+- delete generated labeled data
+
+# Running the Scalability Experiment
+The scalability of the system is evaluated using the experiment script:
+```bash
+experiments/scalability
 
 
 
