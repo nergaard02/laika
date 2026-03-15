@@ -173,7 +173,98 @@ This experiment automatically:
 
 ## Experiment output
 The experiment produces the following output files:
-- through
+- throughput_results.csv
+- scalability_plot.pdf
+- scalability_plot.svg
+
+These files contain:
+- raw throughput measurements
+- average throughput values
+- a scalability plot showing workers vs throughput
+
+The generated plot includes error bars representing standard deviation across multiple runs
+
+# Testing
+
+The project also includes a set of automated tests located in the `tests.py` file.  
+These tests verify both the correctness of the task scheduler and the behaviour of the Raft consensus implementation.
+
+The tests simulate various failure scenarios to ensure that the system behaves correctly in a hostile cluster environment.
+
+## Types of Tests
+
+### State Machine Tests
+
+These tests verify that the scheduler state machine enforces correct task semantics.
+
+Example checks include:
+
+- tasks cannot be completed twice
+- results from outdated workers are ignored
+- rescheduled tasks are assigned correctly
+
+Example test:
+
+- `test_duplicate_task()` ensures that when a task is reassigned after lease expiration, results from the old worker are ignored.
+
+---
+
+### Cluster Failure Tests
+
+These tests simulate failures of worker nodes and local controllers.
+
+Examples include:
+
+- `test_replica_activation()`  
+  Verifies that a replica node is activated, and thus used for recivovery, when another local controller node crashes.
+
+- `test_node_rejoin_after_crash()`  
+  Ensures that a local controller node that crashes and restarts successfully re-registers with the cluster.
+
+---
+
+### Raft Consensus Tests
+
+The Raft implementation is tested under several failure scenarios to verify correct consensus behaviour.
+
+The following properties are tested:
+
+- leader election after failure
+- leader step-down when an old leader rejoins
+- follower log catch-up after restart
+- log conflict resolution
+- outdated nodes cannot win elections
+
+Example tests include:
+
+- `test_leader_election_after_crash()`  
+  Ensures that a new leader is elected when the current leader fails.
+
+- `test_old_leader_steps_down_after_restart()`  
+  Ensures that a restarted leader steps down when it discovers a newer term.
+
+- `test_follower_log_catchup_after_restart()`  
+  Verifies that followers correctly synchronize their logs after restarting.
+
+- `test_log_conflict_resolution()`  
+  Tests Raft's log conflict resolution mechanism.
+
+- `test_outdated_log_cannot_win_election()`  
+  Ensures that nodes with outdated logs cannot become leader.
+
+---
+
+## Running the Tests
+
+Tests can be executed using **pytest**:
+
+```bash
+pytest tests.py
+```
+
+Note that some tests interact with the cluster and may take several seconds to complete due to node startup, crash simulation, and recovery.
+
+
 
 
 
