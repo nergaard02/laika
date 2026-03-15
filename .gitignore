@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+.env/
+
+# Logs
+*.log
+
+# Raft persistent state
+*_raft_state.json
+
+# Experiment outputs
+*.csv
+*.pdf
+*.svg
+
+# Cluster generated files
+cluster_info.json
+
+# Generated labeled dataset
+labeled-data/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python build artifacts
+build/
+dist/
+*.egg-info/
+
+# pytest cache
+.pytest_cache/
+
+# IDE files
+.vscode/
+.idea/
