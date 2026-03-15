@@ -161,7 +161,19 @@ This script will:
 # Running the Scalability Experiment
 The scalability of the system is evaluated using the experiment script:
 ```bash
-experiments/scalability
+experiments/throughput_test.py
+```
+This experiment automatically:
+1. Starts the cluster
+2. Detects the current Raft leader
+3. Runs the workload for a fixed time interval
+4. Measures task throughput
+5. Repeats the  test with different number of worker nodes
+6. Generates performance results
+
+## Experiment output
+The experiment produces the following output files:
+- through
 
 
 
